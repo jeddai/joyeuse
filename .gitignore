@@ -2,3 +2,5 @@
 target
 *.iml
 *.jar
+dist
+app-config.ts

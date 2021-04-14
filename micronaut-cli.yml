@@ -1,6 +1,0 @@
-applicationType: default
-defaultPackage: com.jeddai
-testFramework: junit
-sourceLanguage: kotlin
-buildTool: maven
-features: [annotation-api, app-name, http-client, junit, kotlin, kotlin-application, logback, maven, netty-server, readme, shade, yaml]
