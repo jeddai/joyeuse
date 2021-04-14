@@ -1,0 +1,10 @@
+micronaut:
+  application:
+    name: theSpeaker
+  server:
+    port: 8080
+
+command-prefix: "!"
+
+discord:
+  token: ODMwOTgyMTY5ODkxMzA3NTIw.YHOmdA.B-QSw_dn1KxhG6NMGiVRZOIIcQI
