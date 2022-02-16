@@ -1,3 +1,4 @@
 export enum EmojiStrings {
-    RAISED_HAND = '✋'
+    RAISED_HAND = '✋',
+    THINKING = '🤔'
 }

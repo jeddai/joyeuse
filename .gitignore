@@ -3,4 +3,7 @@ target
 *.iml
 *.jar
 dist
-app-config.ts
+app-config.yml
+.zshenv
+node_modules
+helm/envs

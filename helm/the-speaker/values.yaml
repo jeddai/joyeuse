@@ -1,0 +1,31 @@
+global:
+  redis: {}
+#    password: password
+
+speaker:
+  version: 0.0.1
+  replicaCount: 1
+
+discord: {}
+#  token: discord api token
+
+redis:
+  enabled: true
+  fullnameOverride: redis
+  usePassword: true
+  usePasswordFile: true
+  existingSecret: redis-secret
+  cluster:
+    enabled: true
+    slaveCount: 2
+  master:
+    persistence:
+      enabled: true
+      size: 5Gi
+  slave:
+    persistence:
+      enabled: true
+      size: 5Gi
+  insights:
+    enabled: true
+    ingressEnabled: false

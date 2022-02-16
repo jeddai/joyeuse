@@ -1,0 +1,71 @@
+{{- if .Values.redis.insights.enabled }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: redisinsight-service
+spec:
+  type: ClusterIP
+  ports:
+    - port: 80
+      targetPort: 8001
+      name: redisinsight
+  selector:
+    app: redisinsight
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: redisinsight
+  labels:
+    app: redisinsight
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: redisinsight
+  template:
+    metadata:
+      labels:
+        app: redisinsight
+    spec:
+      containers:
+        - name:  redisinsight
+          image: redislabs/redisinsight:1.7.0
+          imagePullPolicy: IfNotPresent
+          volumeMounts:
+            - name: db
+              mountPath: /db
+          ports:
+            - containerPort: 8001
+              protocol: TCP
+      volumes:
+        - name: db
+          emptyDir: {}
+{{- if .Values.redis.insights.ingressEnabled }}
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: redisinsights-ingress
+  namespace: {{ .Release.Namespace }}
+  annotations:
+    external-dns.alpha.kubernetes.io/hostname: redis-{{ .Values.domain }}
+    kubernetes.io/ingress.class: "{{ .Values.ingressClass }}"
+    certmanager.k8s.io/cluster-issuer: letsencrypt
+    cert-manager.io/cluster-issuer: letsencrypt
+spec:
+  tls:
+    - hosts:
+        - redis-{{ .Values.domain }}
+      secretName: redis-ui-cert
+  rules:
+    - host: redis-{{ .Values.domain }}
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: redisinsight-service
+              servicePort: redisinsight
+{{- end }}
+{{- end }}

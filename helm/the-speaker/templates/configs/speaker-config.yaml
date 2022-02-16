@@ -1,0 +1,53 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: speaker-config
+data:
+  config.yaml: |
+    prefix: '!'
+    imageUrls:
+      iconUrl: 'https://jeddai.nyc3.digitaloceanspaces.com/the-speaker/speaker.png'
+      raids:
+        deepStoneCrypt:
+          - 'https://jeddai.nyc3.digitaloceanspaces.com/the-speaker/raids/deep-stone-crypt/d2_beyondlight_deepstonecrypt_raid_01.jpg'
+          - 'https://jeddai.nyc3.digitaloceanspaces.com/the-speaker/raids/deep-stone-crypt/d2_beyondlight_deepstonecrypt_raid_03.jpg'
+          - 'https://jeddai.nyc3.digitaloceanspaces.com/the-speaker/raids/deep-stone-crypt/d2_beyondlight_deepstonecrypt_raid_04.jpg'
+          - 'https://jeddai.nyc3.digitaloceanspaces.com/the-speaker/raids/deep-stone-crypt/d2_beyondlight_deepstonecrypt_raid_06.jpg'
+          - 'https://jeddai.nyc3.digitaloceanspaces.com/the-speaker/raids/deep-stone-crypt/d2_beyondlight_deepstonecrypt_raid_10.jpg'
+          - 'https://jeddai.nyc3.digitaloceanspaces.com/the-speaker/raids/deep-stone-crypt/d2_beyondlight_deepstonecrypt_raid_16.jpg'
+        gardenOfSalvation:
+          - 'https://jeddai.nyc3.digitaloceanspaces.com/the-speaker/raids/garden-of-salvation/D2_Shadowkeep_GardenOfSalvation_00.png'
+          - 'https://jeddai.nyc3.digitaloceanspaces.com/the-speaker/raids/garden-of-salvation/D2_Shadowkeep_GardenOfSalvation_01.png'
+          - 'https://jeddai.nyc3.digitaloceanspaces.com/the-speaker/raids/garden-of-salvation/D2_Shadowkeep_GardenOfSalvation_02.png'
+          - 'https://jeddai.nyc3.digitaloceanspaces.com/the-speaker/raids/garden-of-salvation/D2_Shadowkeep_GardenOfSalvation_03.png'
+          - 'https://jeddai.nyc3.digitaloceanspaces.com/the-speaker/raids/garden-of-salvation/D2_Shadowkeep_GardenOfSalvation_04.png'
+          - 'https://jeddai.nyc3.digitaloceanspaces.com/the-speaker/raids/garden-of-salvation/D2_Shadowkeep_GardenOfSalvation_05.png'
+          - 'https://jeddai.nyc3.digitaloceanspaces.com/the-speaker/raids/garden-of-salvation/D2_Shadowkeep_GardenOfSalvation_06.png'
+          - 'https://jeddai.nyc3.digitaloceanspaces.com/the-speaker/raids/garden-of-salvation/D2_Shadowkeep_GardenOfSalvation_07.png'
+          - 'https://jeddai.nyc3.digitaloceanspaces.com/the-speaker/raids/garden-of-salvation/D2_Shadowkeep_GardenOfSalvation_08.png'
+          - 'https://jeddai.nyc3.digitaloceanspaces.com/the-speaker/raids/garden-of-salvation/D2_Shadowkeep_GardenOfSalvation_09.png'
+        lastWish:
+          - 'https://jeddai.nyc3.digitaloceanspaces.com/the-speaker/raids/last-wish/D2_Forsaken_LastWish_01.png'
+          - 'https://jeddai.nyc3.digitaloceanspaces.com/the-speaker/raids/last-wish/D2_Forsaken_LastWish_02.png'
+          - 'https://jeddai.nyc3.digitaloceanspaces.com/the-speaker/raids/last-wish/D2_Forsaken_LastWish_03.png'
+          - 'https://jeddai.nyc3.digitaloceanspaces.com/the-speaker/raids/last-wish/D2_Forsaken_LastWish_04.png'
+          - 'https://jeddai.nyc3.digitaloceanspaces.com/the-speaker/raids/last-wish/D2_Forsaken_LastWish_05.png'
+          - 'https://jeddai.nyc3.digitaloceanspaces.com/the-speaker/raids/last-wish/D2_Forsaken_LastWish_06.png'
+          - 'https://jeddai.nyc3.digitaloceanspaces.com/the-speaker/raids/last-wish/D2_Forsaken_LastWish_07.png'
+          - 'https://jeddai.nyc3.digitaloceanspaces.com/the-speaker/raids/last-wish/D2_Forsaken_LastWish_08.png'
+          - 'https://jeddai.nyc3.digitaloceanspaces.com/the-speaker/raids/last-wish/D2_Forsaken_LastWish_09.png'
+          - 'https://jeddai.nyc3.digitaloceanspaces.com/the-speaker/raids/last-wish/D2_Forsaken_LastWish_10.png'
+          - 'https://jeddai.nyc3.digitaloceanspaces.com/the-speaker/raids/last-wish/D2_Forsaken_LastWish_11.png'
+          - 'https://jeddai.nyc3.digitaloceanspaces.com/the-speaker/raids/last-wish/D2_Forsaken_LastWish_12.png'
+          - 'https://jeddai.nyc3.digitaloceanspaces.com/the-speaker/raids/last-wish/D2_Forsaken_LastWish_13.png'
+          - 'https://jeddai.nyc3.digitaloceanspaces.com/the-speaker/raids/last-wish/D2_Forsaken_LastWish_14.png'
+        vaultOfGlass:
+          - 'https://jeddai.nyc3.digitaloceanspaces.com/the-speaker/raids/vault-of-glass/2021_Season_of_the_Splicer_Press_Kit_Vault_of_Glass_COMPRESSED01.jpg'
+          - 'https://jeddai.nyc3.digitaloceanspaces.com/the-speaker/raids/vault-of-glass/2021_Season_of_the_Splicer_Press_Kit_Vault_of_Glass_COMPRESSED02.jpg'
+          - 'https://jeddai.nyc3.digitaloceanspaces.com/the-speaker/raids/vault-of-glass/2021_Season_of_the_Splicer_Press_Kit_Vault_of_Glass_COMPRESSED03.jpg'
+    discord:
+      shardCount: 1
+    redis:
+      url: 'redis-master:6379'
+      username: 'default'
