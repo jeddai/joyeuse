@@ -102,7 +102,6 @@ export const handleRaidCreate = async (interaction: CommandInteraction) => {
 
 export const handleRaidInteraction = async (interaction: MessageComponentInteraction, params: string[]): Promise<void> => {
     const [ primary, secondary, tertiary ] = params;
-    console.log(primary, secondary, tertiary);
 
     let raid = await RaidStore.get(interaction.message.id);
 
