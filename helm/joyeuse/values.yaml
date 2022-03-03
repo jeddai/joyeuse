@@ -2,11 +2,13 @@ global:
   redis: {}
 #    password: password
 
-speaker:
-  version: 0.0.1
+joyeuse:
+  image: jeddai/joyeuse
+  version: 0.0.3
   replicaCount: 1
 
-discord: {}
+discord:
+  clientId: ''
 #  token: discord api token
 
 redis:

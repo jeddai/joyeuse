@@ -1,0 +1,15 @@
+.idea
+helm
+kubernetes
+app/.vscode
+app/dist
+app/node_modules
+server/config
+server/data
+server/dist
+server/node_modules
+server/static
+dist
+README.md
+app-config.yml
+*.iml

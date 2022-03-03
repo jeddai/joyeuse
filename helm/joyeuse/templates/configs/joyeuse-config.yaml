@@ -5,9 +5,8 @@ metadata:
   name: joyeuse-config
 data:
   config.yaml: |
-    prefix: '!'
     imageUrls:
-      iconUrl: 'https://jeddai.nyc3.digitaloceanspaces.com/the-speaker/speaker.png'
+      iconUrl: 'https://jeddai.nyc3.digitaloceanspaces.com/the-speaker/joyeuse.png'
       raids:
         deepStoneCrypt:
           - 'https://jeddai.nyc3.digitaloceanspaces.com/the-speaker/raids/deep-stone-crypt/d2_beyondlight_deepstonecrypt_raid_01.jpg'
@@ -46,8 +45,13 @@ data:
           - 'https://jeddai.nyc3.digitaloceanspaces.com/the-speaker/raids/vault-of-glass/2021_Season_of_the_Splicer_Press_Kit_Vault_of_Glass_COMPRESSED01.jpg'
           - 'https://jeddai.nyc3.digitaloceanspaces.com/the-speaker/raids/vault-of-glass/2021_Season_of_the_Splicer_Press_Kit_Vault_of_Glass_COMPRESSED02.jpg'
           - 'https://jeddai.nyc3.digitaloceanspaces.com/the-speaker/raids/vault-of-glass/2021_Season_of_the_Splicer_Press_Kit_Vault_of_Glass_COMPRESSED03.jpg'
+        vowOfTheDisciple:
+          - 'https://jeddai.nyc3.digitaloceanspaces.com/the-speaker/raids/vow-of-the-disciple/2022_Vow_Raid_Pyramid_Large_01.jpg'
+          - 'https://jeddai.nyc3.digitaloceanspaces.com/the-speaker/raids/vow-of-the-disciple/2022_Vow_Raid_Raid_Key_Art04.jpg'
     discord:
-      shardCount: 1
+      clientId: '{{ .Values.discord.clientId }}'
+      shardCount: {{ .Values.joyeuse.replicaCount }}
     redis:
       url: 'redis-master:6379'
       username: 'default'
+      dbCount: 16
