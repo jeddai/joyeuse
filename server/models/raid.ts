@@ -58,10 +58,6 @@ export class Raid {
     get imageUrls(): string[] | undefined {
         return AppConfig.imageUrls.raids[this.shortName];
     }
-
-    get footer(): string {
-        return "Footer text"
-    }
 }
 
 export const Raids: Raid[] = [

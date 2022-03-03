@@ -1,26 +1,26 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: the-speaker
+  name: joyeuse
 spec:
-  replicas: {{ .Values.speaker.replicaCount }}
+  replicas: {{ .Values.joyeuse.replicaCount }}
   selector:
     matchLabels:
-      app.kubernetes.io/name: the-speaker
+      app.kubernetes.io/name: joyeuse
   template:
     metadata:
       labels:
-        app.kubernetes.io/name: the-speaker
+        app.kubernetes.io/name: joyeuse
       annotations:
-        checksum/config: {{ include (print $.Template.BasePath "/configs/speaker-config.yaml") . | sha256sum }}
+        checksum/config: {{ include (print $.Template.BasePath "/configs/joyeuse-config.yaml") . | sha256sum }}
     spec:
       volumes:
-        - name: speaker-config
+        - name: joyeuse-config
           configMap:
-            name: speaker-config
+            name: joyeuse-config
       containers:
         - name: {{ .Chart.Name }}
-          image: jeddai/the-speaker:{{ .Values.speaker.version }}
+          image: jeddai/joyeuse:{{ .Values.joyeuse.version }}
           imagePullPolicy: Always
           env:
             - name: CONFIG_PATH
@@ -36,6 +36,6 @@ spec:
                   name: discord-secret
                   key: token
           volumeMounts:
-            - name: speaker-config
+            - name: joyeuse-config
               mountPath: /app/config.yaml
               subPath: config.yaml

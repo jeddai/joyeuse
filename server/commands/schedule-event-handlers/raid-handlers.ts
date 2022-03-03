@@ -16,7 +16,7 @@ import { SCHEDULE_EVENT_COMMAND_NAME } from '../schedule-event';
 
 export const handleRaidCreate = async (interaction: CommandInteraction) => {
     const raidName = interaction.options.getString('raid-name');
-    const { name, description, color, vaulted, imageUrls, footer } = getRaid(raidName);
+    const { name, description, color, vaulted, imageUrls } = getRaid(raidName);
 
     if (!name) {
         return await interaction.reply({ content: `Unable to find the selected raid`, ephemeral: true });
@@ -41,10 +41,6 @@ export const handleRaidCreate = async (interaction: CommandInteraction) => {
     const embed = new MessageEmbed({
         color,
         title: name,
-        author: {
-            name: 'Joyeuse',
-            iconURL: AppConfig.imageUrls.iconUrl
-        },
         description: description,
         fields: [!!startTime ? {
             name: 'Start Time',
@@ -65,7 +61,8 @@ export const handleRaidCreate = async (interaction: CommandInteraction) => {
         } : undefined,
         timestamp: Date.now(),
         footer: {
-            text: footer
+            text: `via joyeuse.app`,
+            iconURL: AppConfig.imageUrls.iconUrl
         }
     });
 
@@ -114,30 +111,27 @@ export const handleRaidInteraction = async (interaction: MessageComponentInterac
 
         let embed = (message || interaction.message).embeds[0];
         if (!embed) {
-            const { name, description, color, imageUrls, footer } = getRaid(raid.raid);
+            const { name, description, color, imageUrls } = getRaid(raid.raid);
             embed = new MessageEmbed({
                 color,
                 title: name,
-                author: {
-                    name: 'Joyeuse',
-                    iconURL: AppConfig.imageUrls.iconUrl
-                },
                 description: description,
                 fields: [{
-                    name: 'Participants',
-                    value: '-',
-                    inline: true
-                }, {
-                    name: 'Standby',
-                    value: '-',
-                    inline: true
-                }],
+                        name: 'Participants',
+                        value: '-',
+                        inline: true
+                    }, {
+                        name: 'Standby',
+                        value: '-',
+                        inline: true
+                    }].filter(f => !!f) as EmbedField[],
                 image: !!imageUrls ? {
                     url: imageUrls[randomInt(0, imageUrls.length - 1)]
                 } : undefined,
                 timestamp: Date.now(),
                 footer: {
-                    text: footer
+                    text: `via joyeuse.app`,
+                    iconURL: AppConfig.imageUrls.iconUrl
                 }
             })
         }
@@ -262,12 +256,12 @@ export const handleRaidInteraction = async (interaction: MessageComponentInterac
 
             if (secondary === 'join') {
                 if (raid.participants.length < 6) {
-                    raid.participants = [ ...raid.participants, interaction.user.id ];
+                    raid.participants = _.uniq([ ...raid.participants, interaction.user.id ]);
                 } else {
-                    raid.standby = [ ...raid.standby, interaction.user.id ];
+                    raid.standby = _.uniq([ ...raid.standby, interaction.user.id ]);
                 }
             } else if (secondary === 'standby') {
-                raid.standby = [ ...raid.standby, interaction.user.id ];
+                raid.standby = _.uniq([ ...raid.standby, interaction.user.id ]);
             } else if (secondary === 'notify') {
                 if (raid.participants.length > 0 && raid.participants[0] === interaction.user.id) {
                     if (raid.notified) {

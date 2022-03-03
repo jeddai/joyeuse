@@ -2,7 +2,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: speaker-config
+  name: joyeuse-config
 data:
   config.yaml: |
     prefix: '!'
