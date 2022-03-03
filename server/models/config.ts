@@ -2,7 +2,6 @@ import * as fs from 'fs';
 import { load } from 'js-yaml';
 
 export interface Config {
-    prefix: string
     imageUrls: {
         iconUrl: string
         raids: {
@@ -10,12 +9,15 @@ export interface Config {
         }
     }
     discord: {
+        clientId: string
+        guildId: string | undefined
         token: string | undefined
         shardCount: number
     }
     redis: {
         url: string
         username: string
+        dbCount: number
         password: string | undefined
     }
 }

@@ -7,3 +7,5 @@ app-config.yml
 .zshenv
 node_modules
 helm/envs
+data
+config/*

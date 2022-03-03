@@ -9,7 +9,8 @@ export enum RaidName {
     LW = 'Last Wish',
     SOS = 'Spire of Stars',
     SOTP = 'Scourge of the Past',
-    VOG = 'Vault of Glass'
+    VOG = 'Vault of Glass',
+    VOW = 'Vow of the Disciple'
 }
 
 enum Color {
@@ -49,6 +50,7 @@ export class Raid {
             case RaidName.SOS: return 'spireOfStars';
             case RaidName.SOTP: return 'scourgeOfThePast';
             case RaidName.VOG: return 'vaultOfGlass';
+            case RaidName.VOW: return 'vowOfTheDisciple';
             default: return '';
         }
     }
@@ -62,7 +64,7 @@ export class Raid {
     }
 }
 
-const raids: Raid[] = [
+export const Raids: Raid[] = [
     new Raid(RaidName.COS, true, Color.SICKLY_GREEN),
     new Raid(RaidName.DSC, false, Color.TEAL, `Purge the House of Salvation from the Deep Stone Crypt. Crash the Morning Star into Europa.`),
     new Raid(RaidName.EOW, true, Color.GRAY),
@@ -71,11 +73,12 @@ const raids: Raid[] = [
     new Raid(RaidName.LW, false, Color.BLACK, `Put an end to the Taken curse within the Dreaming City through killing Riven of a Thousand Voices, an Ahamkara taken by Oryx.`),
     new Raid(RaidName.SOS, true, Color.PURPLE),
     new Raid(RaidName.SOTP, true, Color.RED),
-    new Raid(RaidName.VOG, false, Color.SILVER, `The time lost Raid returns. Stored away, deep in the Vault of Glass on Venus is Atheon, Time's Conflux. No one knows what this Vex is. Guardians must access the Vault, navigate the fractures in space and time, and terminate Atheon before it can become an unstoppable threat.`)
+    new Raid(RaidName.VOG, false, Color.SILVER, `The time lost Raid returns. Stored away, deep in the Vault of Glass on Venus is Atheon, Time's Conflux. No one knows what this Vex is. Guardians must access the Vault, navigate the fractures in space and time, and terminate Atheon before it can become an unstoppable threat.`),
+    new Raid(RaidName.VOW, false, Color.BLACK, `Among the swamps of Savathûn's Throne World lies a sunken Pyramid. Guardians will gather their fireteam and confront the ancient danger that lies within.`)
 ]
 
-export const getRaid = (raidName: RaidName | undefined): Raid | undefined => {
-    return raids.find(raid => raid.name === raidName);
+export const getRaid = (raidName: string | null | undefined): Raid => {
+    return Raids.find(raid => raid.shortName === raidName || raid.name === raidName) || {} as Raid;
 }
 
 export const raidKeys: { [key: string]: RaidName } = {
@@ -85,6 +88,7 @@ export const raidKeys: { [key: string]: RaidName } = {
     'dsc': RaidName.DSC,
     'deep stone': RaidName.DSC,
     'deep stone crypt': RaidName.DSC,
+    'disciple': RaidName.VOW,
     'eow': RaidName.EOW,
     'eater': RaidName.EOW,
     'eater worlds': RaidName.EOW,
@@ -104,5 +108,6 @@ export const raidKeys: { [key: string]: RaidName } = {
     'scourge past': RaidName.SOTP,
     'vog': RaidName.VOG,
     'vault': RaidName.VOG,
-    'vault glass': RaidName.VOG
+    'vault glass': RaidName.VOG,
+    'vow': RaidName.VOW
 };
