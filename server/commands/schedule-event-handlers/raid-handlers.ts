@@ -6,17 +6,79 @@ import {
     MessageComponentInteraction,
     MessageEmbed
 } from 'discord.js';
-import { RaidDetails, RaidStore } from '../../keyv';
-import { AppConfig, getRaid } from '../../models';
+import { MetricStore, RaidDetails, RaidStore } from '../../keyv';
+import { AppConfig, getRaid, Raids } from '../../models';
 import { randomInt } from 'crypto';
 import _ from 'lodash';
 import { MessageButtonStyles } from 'discord.js/typings/enums';
 import { client } from '../../discord/discord-client';
 import { SCHEDULE_EVENT_COMMAND_NAME } from '../schedule-event';
+import { SlashCommandSubcommandBuilder } from '@discordjs/builders';
+
+const RAID = 'raid';
+const OPTION_RAID_NAME = 'raid-name';
+const OPTION_START_TIME = 'start-time';
+const OPTION_CAN_TEACH = 'can-teach';
+const OPTION_TEACHING_RUN = 'teaching-run';
+const OPTION_DATE = 'date';
+const OPTION_PARTICIPANT = (n: number) => {
+    return `participant-${n}`;
+}
+
+export const raidSubcommand = (subcommand: SlashCommandSubcommandBuilder) =>
+    subcommand.setName(RAID)
+        .setDescription('Schedule a raid event')
+        .addStringOption(option => {
+            option.setName(OPTION_RAID_NAME)
+                .setDescription(`The name of the raid.`)
+                .setRequired(true)
+
+            Raids.forEach(raid => {
+                option.addChoice(raid.name, raid.shortName);
+            });
+
+            return option;
+        })
+        .addStringOption(option =>
+            option.setName(OPTION_DATE)
+                .setDescription(`The date the raid will take place. If not set, it will be set to today. Example: ${new Date().toDateString().substring(4, 10)}`)
+        )
+        .addStringOption(option =>
+            option.setName(OPTION_START_TIME)
+                .setDescription('The time the raid will start. Make sure to include the timezone!')
+        )
+        .addBooleanOption(option =>
+            option.setName(OPTION_CAN_TEACH)
+                .setDescription('Do you have time to teach this raid? If you want to leave it ambiguous, do not set a value for this.')
+        )
+        .addBooleanOption(option =>
+            option.setName(OPTION_TEACHING_RUN)
+                .setDescription('This run will include people who are learning the raid.')
+        )
+        .addUserOption(option =>
+            option.setName(OPTION_PARTICIPANT(1))
+                .setDescription('A participant you want to add to the raid.')
+        )
+        .addUserOption(option =>
+            option.setName(OPTION_PARTICIPANT(2))
+                .setDescription('A participant you want to add to the raid.')
+        )
+        .addUserOption(option =>
+            option.setName(OPTION_PARTICIPANT(3))
+                .setDescription('A participant you want to add to the raid.')
+        )
+        .addUserOption(option =>
+            option.setName(OPTION_PARTICIPANT(4))
+                .setDescription('A participant you want to add to the raid.')
+        )
+        .addUserOption(option =>
+            option.setName(OPTION_PARTICIPANT(5))
+                .setDescription('A participant you want to add to the raid.')
+        )
 
 export const handleRaidCreate = async (interaction: CommandInteraction) => {
-    const raidName = interaction.options.getString('raid-name');
-    const { name, description, color, vaulted, imageUrls } = getRaid(raidName);
+    const raidName = interaction.options.getString(OPTION_RAID_NAME);
+    const { name, shortName, description, color, vaulted, imageUrls } = getRaid(raidName);
 
     if (!name) {
         return await interaction.reply({ content: `Unable to find the selected raid`, ephemeral: true });
@@ -27,11 +89,16 @@ export const handleRaidCreate = async (interaction: CommandInteraction) => {
     }
 
     let users = _.range(1, 6).map(u => {
-        const user = interaction.options.getUser(`participant-${u}`);
+        const user = interaction.options.getUser(OPTION_PARTICIPANT(u));
         return user?.id
     }).filter(u => !!u);
 
-    const startTime = interaction.options.getString('start-time');
+    const date = interaction.options.getString(OPTION_DATE) || new Date().toDateString().substring(4, 10);
+    const startTime = interaction.options.getString(OPTION_START_TIME) || undefined;
+    const canTeach = interaction.options.getBoolean(OPTION_CAN_TEACH) !== null ?
+        interaction.options.getBoolean(OPTION_CAN_TEACH) as boolean : undefined;
+    const teachingRun = interaction.options.getBoolean(OPTION_TEACHING_RUN) !== null ?
+        interaction.options.getBoolean(OPTION_TEACHING_RUN) as boolean : undefined;
 
     const participants = _.uniq([ interaction.user.id, ...users ]) as string[];
     const participantsText = [ ...participants, ...(_.range(6 - participants.length).map(_ => '')) ]
@@ -42,20 +109,38 @@ export const handleRaidCreate = async (interaction: CommandInteraction) => {
         color,
         title: name,
         description: description,
-        fields: [!!startTime ? {
-            name: 'Start Time',
-            value: startTime,
-            inline: false
-        } : null,
+        fields: [
+            {
+                name: 'Date',
+                value: date,
+                inline: false
+            },
+            !!startTime ? {
+                name: 'Start Time',
+                value: startTime,
+                inline: false
+            } : null,
+            canTeach !== undefined ? {
+                name: 'Can Teach',
+                value: canTeach ? 'Yes' : 'No',
+                inline: false
+            } : null,
+            teachingRun !== undefined ? {
+                name: 'Teaching Run',
+                value: teachingRun ? 'Yes' : 'No',
+                inline: false
+            } : null,
             {
                 name: 'Participants',
                 value: participantsText,
                 inline: true
-            }, {
+            },
+            {
                 name: 'Standby',
                 value: standbyText,
                 inline: true
-            }].filter(f => !!f) as EmbedField[],
+            }
+        ].filter(f => !!f) as EmbedField[],
         image: !!imageUrls ? {
             url: imageUrls[randomInt(0, imageUrls.length - 1)]
         } : undefined,
@@ -65,7 +150,6 @@ export const handleRaidCreate = async (interaction: CommandInteraction) => {
             iconURL: AppConfig.imageUrls.iconUrl
         }
     });
-
 
     const sentEmbed = await interaction.reply({
         embeds: [ embed ],
@@ -91,19 +175,31 @@ export const handleRaidCreate = async (interaction: CommandInteraction) => {
 
     const details: RaidDetails = {
         messageId: sentEmbed.id,
+        channelId: interaction.channel?.id,
         guildId: interaction.guild?.id,
         raid: name,
         participants,
         standby: [],
-        notified: false
+        notified: false,
+        startTime,
+        canTeach,
+        teachingRun,
+        date
     }
-    await RaidStore.set(sentEmbed.id, details);
+    const store = await RaidStore.set(`${interaction.guild?.id}:${sentEmbed.id}`, details);
+    if (!store) {
+        await interaction.followUp({ content: `The server was unable to store your raid information. Please destroy the raid and try again.`, ephemeral: true });
+    }
+
+    await MetricStore.perform(`raid:${shortName}:${interaction.guild?.id}`, metric => {
+        metric.count = (metric.count || 0) + 1;
+    });
 }
 
 export const handleRaidInteraction = async (interaction: MessageComponentInteraction, params: string[]): Promise<void> => {
-    const [ primary, secondary, tertiary ] = params;
+    const [ primary, secondary, tertiary, quaternary ] = params;
 
-    let raid = await RaidStore.get(interaction.message.id);
+    let raid = await RaidStore.get(`${interaction.guild?.id}:${interaction.message.id}`);
 
     const update = async (message?: Message) => {
         if (!raid) return;
@@ -149,14 +245,14 @@ export const handleRaidInteraction = async (interaction: MessageComponentInterac
         } else {
             await interaction.update({ embeds: [embed] });
         }
-        await RaidStore.set(raid.messageId, raid);
+        await RaidStore.set(`${interaction.guild?.id}:${raid.messageId}`, raid);
     }
 
     switch (primary) {
         case 'join':
         case 'standby': {
             if (!raid) {
-                return await interaction.reply({ content: `This raid has expired.` });
+                return await interaction.reply({ content: `This raid has expired.`, ephemeral: true });
             }
 
             const participating = raid.participants.find(p => p === interaction.user.id);
@@ -245,7 +341,7 @@ export const handleRaidInteraction = async (interaction: MessageComponentInterac
         }
         case 'response': {
             if (!raid) {
-                raid = await RaidStore.get(tertiary);
+                raid = await RaidStore.get(`${interaction.guild?.id}:${tertiary}`);
                 if (!raid) {
                     return await interaction.reply({ content: `This raid has expired.`, ephemeral: true });
                 }
@@ -275,7 +371,7 @@ export const handleRaidInteraction = async (interaction: MessageComponentInterac
                         }
 
                         await interaction.reply({ content: `Raid participants have been notified`, ephemeral: true });
-                        await RaidStore.set(raid.messageId, raid);
+                        await RaidStore.set(`${interaction.guild?.id}:${raid.messageId}`, raid);
                     }
                 } else {
                     return await interaction.reply({ content: 'You are not authorized to notify users that this raid is starting', ephemeral: true });

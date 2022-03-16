@@ -50,8 +50,7 @@ data:
           - 'https://jeddai.nyc3.digitaloceanspaces.com/the-speaker/raids/vow-of-the-disciple/2022_Vow_Raid_Raid_Key_Art04.jpg'
     discord:
       clientId: '{{ .Values.discord.clientId }}'
-      shardCount: {{ .Values.joyeuse.replicaCount }}
+      shardCount: 1
     redis:
-      url: 'redis-master:6379'
       username: 'default'
       dbCount: 16

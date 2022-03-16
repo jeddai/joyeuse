@@ -15,7 +15,7 @@ export interface Config {
         shardCount: number
     }
     redis: {
-        url: string
+        host?: string
         username: string
         dbCount: number
         password: string | undefined

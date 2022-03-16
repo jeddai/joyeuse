@@ -1,0 +1,88 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: joyeuse-app
+spec:
+  selector:
+    app.kubernetes.io/name: joyeuse-app
+  type: ClusterIP
+  ports:
+    - name: web
+      port: 80
+      targetPort: 3000
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+  name: ingress-joyeuse
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: joyeuse.app
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: joyeuse-app
+                port:
+                  name: web
+  tls:
+    - hosts:
+        - joyeuse.app
+      secretName: ingress-joyeuse-cert
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: joyeuse-app
+spec:
+  replicas: {{ .Values.joyeuse.replicas.app }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: joyeuse-app
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: joyeuse-app
+      annotations:
+        checksum/config: {{ include (print $.Template.BasePath "/configs/joyeuse-config.yaml") . | sha256sum }}
+    spec:
+      volumes:
+        - name: joyeuse-config
+          configMap:
+            name: joyeuse-config
+      containers:
+        - name: {{ .Chart.Name }}
+          image: '{{ .Values.joyeuse.image }}:{{ .Values.joyeuse.version }}'
+          imagePullPolicy: Always
+          env:
+            - name: APP_ENABLED
+              value: 'true'
+            - name: CONFIG_PATH
+              value: /app/config.yaml
+            - name: REDIS_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: redis-secret
+                  key: redis-password
+            - name: REDIS_HOST
+              value: redis-headless:6379
+          volumeMounts:
+            - name: joyeuse-config
+              mountPath: /app/config.yaml
+              subPath: config.yaml
+          livenessProbe:
+            httpGet:
+              port: 3000
+              path: /healthz
+          readinessProbe:
+            httpGet:
+              port: 3000
+              path: /healthz
+          ports:
+            - containerPort: 3000

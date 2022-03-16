@@ -1,12 +1,30 @@
 /* You can add global styles to this file, and also import other style files */
 $logoBackground: #3A3A3C;
+$lightBackground: #666666;
+
+html, body { height: 100%; }
 
 body {
   background-color: $logoBackground;
   color: #eee;
   font-family: Neue Haas Grotesk, sans-serif;
+  margin: 0;
 }
 
 a {
+  text-decoration: none;
   color: #bfa2f5;
+}
+
+a.icon {
+  color: inherit;
+}
+
+.toolbar-small-spacer {
+  flex: 0 0 auto;
+  flex-basis: 10px;
+}
+
+.toolbar-full-spacer {
+  flex: 1 1 auto;
 }

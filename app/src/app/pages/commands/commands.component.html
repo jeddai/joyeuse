@@ -1,0 +1,35 @@
+<mat-drawer-container autosize>
+  <mat-drawer #drawer mode="side" [opened]="true">
+    <h1>Documentation</h1>
+    <mat-selection-list [multiple]="false" (selectionChange)="changeDocPath($event.options[0].value)" >
+      <ng-container *ngFor="let item of docsService.manifest">
+        <h3 *ngIf="item.type === 'section'">{{ item.name }}</h3>
+        <mat-list-option *ngIf="item.type === 'doc'" [value]="item.path">
+          {{ item.name }}
+        </mat-list-option>
+
+        <ng-container *ngIf="!!item.children">
+            <ng-container *ngFor="let child of item.children">
+              <mat-list-option class="child-1" *ngIf="child.type === 'doc'" [value]="child.path">
+                {{ child.name }}
+              </mat-list-option>
+            </ng-container>
+        </ng-container>
+      </ng-container>
+    </mat-selection-list>
+  </mat-drawer>
+  <mat-drawer-content>
+    <markdown
+      [src]="docPath"
+      (load)="onLoad($event)"
+      (error)="onError($event)"
+      *ngIf="!error"
+    ></markdown>
+    <p *ngIf="!!error">{{ error }}</p>
+  </mat-drawer-content>
+</mat-drawer-container>
+
+<button mat-fab color="primary" (click)="drawer.toggle()" style="position: fixed; left: 30px; bottom: 30px; z-index: 1000">
+  <mat-icon *ngIf="drawer.opened">chevron_left</mat-icon>
+  <mat-icon *ngIf="!drawer.opened">chevron_right</mat-icon>
+</button>
