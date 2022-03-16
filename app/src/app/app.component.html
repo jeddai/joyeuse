@@ -1,1 +1,28 @@
-<router-outlet></router-outlet>
+<mat-toolbar class="fixed" style="z-index: 1000">
+  <span id="home" routerLink="/">Joyeuse</span>
+  <span class="toolbar-small-spacer"></span>
+  <button mat-button routerLink="/commands">Commands</button>
+  <span class="toolbar-small-spacer"></span>
+  <button mat-button routerLink="/stats">Stats</button>
+
+  <span class="toolbar-full-spacer"></span>
+
+  <a href="https://discord.com/oauth2/authorize?client_id=830982169891307520&permissions=10737536064&scope=bot%20applications.commands" target="_blank">
+    <button mat-raised-button color="primary">Invite <mat-icon [inline]="true">open_in_new</mat-icon></button>
+  </a>
+</mat-toolbar>
+
+<div class="container">
+  <router-outlet class="outlet"></router-outlet>
+</div>
+
+<mat-toolbar>
+  <button mat-button routerLink="/privacy">Privacy Policy</button>
+
+  <span class="toolbar-full-spacer"></span>
+
+  <a href="https://discord.gg/75sZygM8Gy" class="icon" target="_blank"><button mat-icon-button><i class="fab fa-discord"></i></button></a>
+  <a href="https://gitlab.com/jeddai/joyeuse" class="icon" target="_blank"><button mat-icon-button><i class="fab fa-gitlab"></i></button></a>
+  <a href="https://www.patreon.com/bePatron?u=9554819" class="icon" target="_blank"><button mat-icon-button><i class="fab fa-patreon"></i></button></a>
+  <a href="https://twitter.com/joyeuse_bot" class="icon" target="_blank"><button mat-icon-button><i class="fab fa-twitter"></i></button></a>
+</mat-toolbar>

@@ -1,0 +1,32 @@
+@import '../../../styles.scss';
+
+mat-drawer-container {
+  min-height: calc(100vh - 64px);
+}
+
+mat-drawer {
+  h1, h2, h3, h4, h5 {
+    padding: 10px;
+  }
+  padding-bottom: 50px;
+}
+
+mat-drawer-content {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 12px 12px 50px;
+}
+
+.child-1 .mat-list-item-content {
+  padding-left: 32px !important;
+}
+
+table, th, td {
+  border: 1px solid #666666;
+  border-collapse: collapse;
+}
+
+th, td {
+  padding: 10px;
+}

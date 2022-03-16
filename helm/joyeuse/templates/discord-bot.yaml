@@ -1,0 +1,56 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: joyeuse-bot
+spec:
+  replicas: {{ .Values.joyeuse.replicas.bot }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: joyeuse-bot
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: joyeuse-bot
+      annotations:
+        checksum/config: {{ include (print $.Template.BasePath "/configs/joyeuse-config.yaml") . | sha256sum }}
+    spec:
+      volumes:
+        - name: joyeuse-config
+          configMap:
+            name: joyeuse-config
+      containers:
+        - name: {{ .Chart.Name }}
+          image: '{{ .Values.joyeuse.image }}:{{ .Values.joyeuse.version }}'
+          imagePullPolicy: Always
+          env:
+            - name: DISCORD_ENABLED
+              value: 'true'
+            - name: CONFIG_PATH
+              value: /app/config.yaml
+            - name: REDIS_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: redis-secret
+                  key: redis-password
+            - name: DISCORD_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: discord-secret
+                  key: token
+            - name: REDIS_HOST
+              value: redis-master:6379
+          volumeMounts:
+            - name: joyeuse-config
+              mountPath: /app/config.yaml
+              subPath: config.yaml
+          livenessProbe:
+            httpGet:
+              port: 3000
+              path: /healthz
+          readinessProbe:
+            httpGet:
+              port: 3000
+              path: /healthz
+          ports:
+            - containerPort: 3000

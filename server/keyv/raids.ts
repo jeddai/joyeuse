@@ -1,5 +1,5 @@
 import KeyV, { Store } from 'keyv';
-import { redis, redisUris } from './redis';
+import { extractValues, redis, redisUris } from './redis';
 import { RaidName } from '../models';
 
 const raids = new KeyV(redisUris[0], { namespace: 'raids' });
@@ -16,11 +16,7 @@ const clearRaids = async (): Promise<void> => raids.clear();
 
 const getRaidsForGuild = async (guildId: string): Promise<RaidDetails[]> => {
     const keys = await redis.keys(`raids:${guildId}*`);
-    const raids = [];
-    for (let key of keys) {
-        raids.push(await getRaid(key.substring(6)));
-    }
-    return raids;
+    return await extractValues(keys);
 };
 
 interface DiscordStore extends Store<RaidDetails> {
@@ -36,10 +32,30 @@ export const RaidStore: DiscordStore = {
 }
 
 export interface RaidDetails {
-    messageId: string,
+    canTeach?: boolean,
+    channelId?: string,
+    date: string,
     guildId?: string,
+    messageId: string,
+    notified: boolean,
     raid: RaidName,
     participants: string[],
     standby: string[],
-    notified: boolean
+    startTime?: string,
+    teachingRun?: boolean
+}
+
+await migration();
+
+async function migration() {
+    let migrationKeys = await redis.keys(`raids:*`);
+    migrationKeys = migrationKeys.filter(k => k.split(':').length === 2);
+    const values = await extractValues<RaidDetails>(migrationKeys);
+    for (const raid of values) {
+        delete (raid as any)['key'];
+        if (!!raid) {
+            await RaidStore.set(`${raid.guildId}:${raid.messageId}`, raid);
+            await RaidStore.delete(raid.messageId);
+        }
+    }
 }

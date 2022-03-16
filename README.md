@@ -1,3 +1,7 @@
+<a href="https://top.gg/bot/830982169891307520">
+  <img src="https://top.gg/api/widget/owner/830982169891307520.svg">
+</a>
+
 # Joyeuse
 
 ### Development

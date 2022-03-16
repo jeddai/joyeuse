@@ -5,7 +5,9 @@ global:
 joyeuse:
   image: jeddai/joyeuse
   version: 0.0.3
-  replicaCount: 1
+  replicas:
+    app: 2
+    bot: 1
 
 discord:
   clientId: ''
