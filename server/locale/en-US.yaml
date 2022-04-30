@@ -1,0 +1,116 @@
+genericError: There was an error while executing this command!
+nonInteractiveError: Command <command_name> is not interactive. Not quite sure how this happened.
+raids:
+  deepStoneCrypt:
+    name: Deep Stone Crypt
+    description: Purge the House of Salvation from the Deep Stone Crypt. Crash the Morning Star into Europa.
+  gardenOfSalvation:
+    name: Garden of Salvation
+    description: Track the source of the Unknown Artifact's signal into the Black Garden.
+  lastWish:
+    name: Last Wish
+    description: Put an end to the Taken curse within the Dreaming City through killing Riven of a Thousand Voices, an Ahamkara taken by Oryx.
+  vaultOfGlass:
+    name: Vault of Glass
+    description: The time lost Raid returns. Stored away, deep in the Vault of Glass on Venus is Atheon, Time's Conflux. No one knows what this Vex is. Guardians must access the Vault, navigate the fractures in space and time, and terminate Atheon before it can become an unstoppable threat.
+  vowOfTheDisciple:
+    name: Vow of the Disciple
+    description: Among the swamps of Savathûn's Throne World lies a sunken Pyramid. Guardians will gather their fireteam and confront the ancient danger that lies within.
+commands:
+  schedule:
+    raid:
+      name: raid
+      description: Schedule a raid event
+      options:
+        - name: raid-name
+          description: The name of the raid.
+          type: string
+          required: true
+          choices:
+            - name: Crown of Sorrow
+              value: crownOfSorrow
+            - name: Deep Stone Crypt
+              value: deepStoneCrypt
+            - name: Eater of Worlds
+              value: eaterOfWorlds
+            - name: Garden of Salvation
+              value: gardenOfSalvation
+            - name: Leviathan
+              value: leviathan
+            - name: Last Wish
+              value: lastWish
+            - name: Spire of Stars
+              value: spireOfStars
+            - name: Scourge of the Past
+              value: scourgeOfThePast
+            - name: Vault of Glass
+              value: vaultOfGlass
+            - name: Vow of the Disciple
+              value: vowOfTheDisciple
+        - name: date
+          description: 'The date the raid will take place. Example: Jan 01'
+          type: string
+        - name: locale
+          description: The locale for the main raid message.
+          type: string
+          choices:
+            - name: English - US
+              value: en-US
+            - name: French
+              value: fr
+        - name: start-time
+          description: The time the raid will start. Make sure to include the timezone!
+          type: string
+        - name: can-teach
+          description: Do you have time to teach this raid? If you want to leave it ambiguous, do not set a value for this.
+          type: boolean
+        - name: teaching-run
+          description: This run will include people who are learning the raid.
+          type: boolean
+        - name: participant-1
+          description: A participant you want to add to the raid.
+          type: user
+        - name: participant-2
+          description: A participant you want to add to the raid.
+          type: user
+        - name: participant-3
+          description: A participant you want to add to the raid.
+          type: user
+        - name: participant-4
+          description: A participant you want to add to the raid.
+          type: user
+        - name: participant-5
+          description: A participant you want to add to the raid.
+          type: user
+      responses:
+        raidNotFound: Unable to find the selected raid
+        vaulted: <raid_name> is currently in the Destiny Content Vault.
+        storageFailure: The server was unable to store your raid information. Please destroy the raid and try again.
+        expired: This raid has expired.
+        joinComplete: You have been added to the raid!
+        notifyAttemptFailed: This raid's participants have already been notified and cannot be notified again
+        notifyUnauthorized: You are not authorized to notify users that this raid is starting
+        notifyComplete: Raid participants have been notified
+        destroyUnauthorized: You are not authorized to delete this raid
+        destroyComplete: The raid has been deleted
+      content:
+        date: Date
+        startTime: Start Time
+        canTeach: Can Teach
+        teachingRun: Teaching Run
+        participants: Participants
+        standby: Standby
+        joinConfirmation: By signing up for this raid, I assent that I will be kind, patient, and respectful of others' time.  If I am learning, I will be attentive and ask appropriate questions.
+        notifyConfirmation: |
+          Notify will send direct messages to the participants on this raid to let them know it is starting. **This can only be performed once per raid instance.**
+          Are you sure you want to do this?
+        notification: Your run of <raid_name> is ready to start!
+        destroyConfirmation: |
+          Destroying this raid will delete any remaining references to it in the database, and remove it from this channel.
+          Are you sure you want to do this?
+      actions:
+        join: Join
+        standby: Standby
+        notify: Notify
+        destroy: Destroy
+        agree: I agree
