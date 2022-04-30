@@ -15,6 +15,10 @@ spec:
       annotations:
         checksum/config: {{ include (print $.Template.BasePath "/configs/joyeuse-config.yaml") . | sha256sum }}
     spec:
+      {{- if .Values.global.imageCredentials.username }}
+      imagePullSecrets:
+        - name: {{ .Release.Name }}-image-credentials
+      {{- end }}
       volumes:
         - name: joyeuse-config
           configMap:

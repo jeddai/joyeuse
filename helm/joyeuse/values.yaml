@@ -1,10 +1,14 @@
 global:
+  imageCredentials:
+    registry: registry.gitlab.com
+    username: !!null
+    password: !!null
   redis: {}
 #    password: password
 
 joyeuse:
-  image: jeddai/joyeuse
-  version: 0.0.3
+  image: registry.gitlab.com/jeddai/joyeuse
+  version: 0.0.7
   replicas:
     app: 2
     bot: 1
