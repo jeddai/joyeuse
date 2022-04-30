@@ -24,6 +24,5 @@ COPY --from=server /app/locale/*.yaml locale/
 COPY --from=app /app/dist static
 
 RUN npm install --only=prod --no-shrinkwrap
-RUN rm package.json
 
-CMD ["node", "--experimental-specifier-resolution=node", "dist/app.js"]
+CMD ["npm", "start"]
