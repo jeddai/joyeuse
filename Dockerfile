@@ -20,7 +20,7 @@ WORKDIR /app
 COPY --from=server /app/package.json .
 COPY --from=server /app/dist dist
 RUN mkdir locale
-COPY --from=server /app/locale/*.yaml locale
+COPY --from=server /app/locale/*.yaml locale/
 COPY --from=app /app/dist static
 
 RUN npm install --only=prod --no-shrinkwrap
