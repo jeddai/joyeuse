@@ -34,7 +34,7 @@ export const RaidStore: DiscordStore = {
 export interface RaidDetails {
     canTeach?: boolean,
     channelId?: string,
-    date: string,
+    date?: string,
     guildId?: string,
     messageId: string,
     notified: boolean,
@@ -42,7 +42,8 @@ export interface RaidDetails {
     participants: string[],
     standby: string[],
     startTime?: string,
-    teachingRun?: boolean
+    teachingRun?: boolean,
+    locale: string
 }
 
 await migration();

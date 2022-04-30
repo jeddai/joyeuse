@@ -1,0 +1,92 @@
+genericError: Une erreur s'est produite en exécutant cette commande!
+nonInteractiveError: Cette commande n'est pas interactive. Cette erreur n'aurait pas du se produire.
+raids:
+  deepStoneCrypt:
+    name: Crypte de la Pierre
+    description: Sous la toundra gelée d'Europe se trouve la Crypte de la Pierre. Elle est restée endormie pendant plusieurs décennies... jusqu'à maintenant.
+  gardenOfSalvation:
+    name: Jardin du Salut
+    description: Un signal émerge de l'obscurité et atteint des dimensions lointaines, vers les territoires sauvages et inexplorés du Jardin noir. L'endroit où il mène dans le Jardin est un mystère... Un mystère qui de ses murmures appelle à la tentation, et n'attend que d'être élucidé.
+  lastWish:
+    name: Dernier Voeux
+    description: Riven, dernier des Ahamkara, a été corrompue. Votre mission est de la sauver de la corruption en purifiant son coeur. Entrez dans la cité des rêves et libérez-la! Nous ne pouvons pas laisser les corrompus gagner.
+  vaultOfGlass:
+    name: Caveau de Verre
+    description: Dissimulé au fin fond du Caveau de verre, sur Vénus, se trouve Athéon, Déchirure temporelle. Personne ne connaît la nature de ce Vex. Les Gardiens doivent accéder au Caveau, se frayer un chemin à travers l'espace et le temps, et éliminer Athéon avant qu'il ne devienne une trop grande menace.
+  vowOfTheDisciple:
+    name: Serment du Disciple
+    description: Au beau milieu des marais du monde du trône de Savathûn se trouve une Pyramide engloutie. Avec votre escouade, aventurez-vous à l'intérieur et affrontez l'ancien danger qui y est emprisonné...
+commands:
+  schedule:
+    raid:
+      name: raid
+      description: Programme un raid
+      options:
+        - name: raid-name
+          description: Le nom du raid.
+          choices:
+            - name: Couronne du Malheur
+            - name: Crypte de la Pierre
+            - name: Le Dévoreur de Monde
+            - name: Jardin du Salut
+            - name: Leviathan
+            - name: Dernier Voeux
+            - name: La Flèche d'Étoiles
+            - name: Fléau du Passé
+            - name: Caveau de Verre
+            - name: Serment du Disciple
+        - name: date
+          description: 'Le jour où le raid aura lieu. Exemple: 1er janvier'
+        - name: localisation
+          description: La lieu d'origine du message.
+          choices:
+            - name: English - US
+            - name: French
+        - name: heure-de-départ
+          description: L'heure où le raid va débuter. Sois sûr d'inclure le fuseau horaire!
+        - name: peut-apprendre
+          description: Est-ce que vous avez le temps d'apprendre le raid à d'autres? Si ça reste à définir, ne mettez rien.
+        - name: sherpas
+          description: Cette run du raid va comporter des gens qui apprennent le raid.
+        - name: participant-1
+          description: Un participant que vous voulez ajouter au raid.
+        - name: participant-2
+          description: Un participant que vous voulez ajouter au raid.
+        - name: participant-3
+          description: Un participant que vous voulez ajouter au raid.
+        - name: participant-4
+          description: Un participant que vous voulez ajouter au raid.
+        - name: participant-5
+          description: Un participant que vous voulez ajouter au raid.
+      responses:
+        raidNotFound: Impossible de trouver le raid sélectionné.
+        vaulted: Le Raid <raid_name> est actuellement dans l'archive de quête.
+        storageFailure: Le serveur n'a pas pu enregistrer vos informations de raid. Merci de le détruire et de le recréer.
+        expired: Ce raid a expiré.
+        joinComplete: Vous avez été ajouté au raid!
+        notifyAttemptFailed: Les participants à ce raid ont déjà été notifiés et ne peuvent pas être notifiés de nouveau.
+        notifyUnauthorized: Vous n'êtes pas autorisé à notifier les joueurs du début de ce raid.
+        notifyComplete: Les participants du raid ont été notifiés.
+        destroyUnauthorized: Vous n'avez pas la permission de supprimer ce raid!
+        destroyComplete: Le raid a été supprimé.
+      content:
+        date: Date
+        startTime: Heure de Départ
+        canTeach: RL présent
+        teachingRun: Raid Débutants
+        participants: Participants
+        standby: Remplaçants
+        joinConfirmation: En m'inscrivant à ce raid, je m'engage à être respectueux des consignes et des autres joueurs, patient et sympa. Si je suis débutant, je serai attentif et poserai les questions au moment approprié.
+        notifyConfirmation: |
+          La notification sera envoyée par message direct aux participants de ce raid pour leur indiquer qu'il commence. **Cette action ne peut-être effectuée qu'une seule fois!**
+          Etes-vous sûr de vouloir lancer la notification ?
+        notification: L'activité <raid_name> est sur le point de démarrer!
+        destroyConfirmation: |
+          Détruire ce raid va supprimer toutes ses références de la base de donnée, et le supprimer définitivement de ce canal.
+          Etes-vous sûr de vouloir continuer ?
+      actions:
+        join: Participant
+        standby: Remplaçant
+        notify: Notifier
+        destroy: Détruire
+        agree: J'accepte
