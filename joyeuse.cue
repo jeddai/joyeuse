@@ -177,7 +177,7 @@ dagger.#Plan & {
 			server: actions.buildServer.image
 		}
 		pushFromMain: docker.#Push & {
-			dest: "\(client.env.CI_DEFAULT_BRANCH):latest"
+			dest: "\(client.env.CI_REGISTRY_IMAGE):latest"
 			auth: {
 				username: client.env.CI_REGISTRY_USER
 				secret:		client.env.CI_REGISTRY_PASSWORD
@@ -185,7 +185,7 @@ dagger.#Plan & {
 			image: actions.build.image
 		}
 		pushFromCommit: docker.#Push & {
-			dest: "\(client.env.CI_COMMIT_BRANCH):\(client.env.CI_COMMIT_REF_SLUG)"
+			dest: "\(client.env.CI_REGISTRY_IMAGE):\(client.env.CI_COMMIT_REF_SLUG)"
 			auth: {
 				username: client.env.CI_REGISTRY_USER
 				secret:		client.env.CI_REGISTRY_PASSWORD
