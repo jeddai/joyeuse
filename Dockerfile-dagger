@@ -5,14 +5,9 @@ RUN apk add --no-cache curl
 WORKDIR /usr/local
 RUN curl -L https://dl.dagger.io/dagger/install.sh | sh
 
-FROM docker:latest as deps
+FROM docker:latest
 
 COPY cue.mod cue.mod
 COPY --from=dagger /usr/local/bin/dagger /usr/local/bin/dagger
 RUN dagger project init
 RUN dagger project update
-
-FROM docker:latest
-
-COPY --from=deps cue.mod cue.mod
-COPY --from=dagger /usr/local/bin/dagger /usr/local/bin/dagger
