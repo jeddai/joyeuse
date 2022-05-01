@@ -13,5 +13,5 @@ RUN dagger project update
 
 FROM docker:latest
 
-COPY --from=deps cue.mod /builds/joyeuse-app/joyeuse/cue.mod
+COPY --from=deps cue.mod /tmp/cue.mod
 COPY --from=dagger /usr/local/bin/dagger /usr/local/bin/dagger

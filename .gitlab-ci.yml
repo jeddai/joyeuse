@@ -10,6 +10,8 @@ stages:
     DAGGER_CACHE_PATH: .dagger-cache
   services:
     - docker:dind
+  before_script:
+    - cp -R /tmp/cue.mod /builds/joyeuse-app/joyeuse
   cache:
     key: dagger-${CI_JOB_NAME}
     paths:
