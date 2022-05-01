@@ -15,14 +15,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@gitlab.com/jeddai/the-speaker.git"
+    "url": "git@gitlab.com:joyeuse-app/joyeuse.git"
   },
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://gitlab.com/jeddai/the-speaker/issues"
+    "url": "https://gitlab.com/joyeuse-app/joyeuse/-/issues"
   },
-  "homepage": "https://gitlab.com/jeddai/the-speaker#readme",
+  "homepage": "https://joyeuse.app",
   "devDependencies": {
     "@types/express": "^4.17.13",
     "@types/js-yaml": "^4.0.0",

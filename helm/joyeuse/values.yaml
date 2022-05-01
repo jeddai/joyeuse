@@ -7,7 +7,7 @@ global:
 #    password: password
 
 joyeuse:
-  image: registry.gitlab.com/jeddai/joyeuse
+  image: registry.gitlab.com/joyeuse-app/joyeuse
   version: 0.0.7
   replicas:
     app: 2
