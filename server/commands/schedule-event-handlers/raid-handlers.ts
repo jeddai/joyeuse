@@ -5,7 +5,7 @@ import {
     MessageActionRow,
     MessageButton,
     MessageComponentInteraction,
-    MessageEmbed
+    MessageEmbed, Permissions
 } from 'discord.js';
 import { MetricStore, RaidDetails, RaidStore } from '../../keyv';
 import { AppConfig, getRaid } from '../../models';
@@ -227,6 +227,9 @@ export const handleRaidInteraction = async (interaction: MessageComponentInterac
     const raidLocale = getLocale(raid?.locale as LocaleString).commands.schedule.raid;
     const { content, responses, actions } = getLocale(interaction.locale as LocaleString).commands.schedule.raid;
 
+    const isFireteamLeader = (raid?.participants?.length ?? 0) > 0 && raid?.participants[0] === interaction.user.id;
+    const canManageMessages = interaction.memberPermissions?.has(Permissions.FLAGS.MANAGE_MESSAGES);
+
     const update = async (message?: Message) => {
         if (!raid) return;
 
@@ -345,10 +348,10 @@ export const handleRaidInteraction = async (interaction: MessageComponentInterac
         case 'destroy': {
             if (!raid) {
                 await interaction.channel?.messages.delete(interaction.message.id);
-                return await interaction.reply({ content: responses.destroyComplete, ephemeral: true });
+                return await interaction.reply({content: responses.destroyComplete, ephemeral: true});
             }
 
-            if (raid.participants.length > 0 && raid.participants[0] === interaction.user.id) {
+            if (isFireteamLeader || canManageMessages) {
                 return await interaction.reply({
                     content: content.destroyConfirmation,
                     ephemeral: true,
@@ -407,7 +410,7 @@ export const handleRaidInteraction = async (interaction: MessageComponentInterac
                 }
                 return;
             } else if (secondary === 'destroy') {
-                if (raid.participants.length > 0 && raid.participants[0] === interaction.user.id) {
+                if (isFireteamLeader || canManageMessages) {
                     await interaction.channel?.messages.delete(raid.messageId);
                     await RaidStore.delete(raid.messageId);
                     return await interaction.reply({ content: responses.destroyComplete, ephemeral: true });
