@@ -7,6 +7,7 @@ stages:
   variables:
     DAGGER_VERSION: 0.2.8
     DAGGER_LOG_FORMAT: plain
+    DAGGER_LOG_LEVEL: debug
     DAGGER_CACHE_PATH: .dagger-cache
   services:
     - docker:dind
