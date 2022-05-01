@@ -186,6 +186,10 @@ dagger.#Plan & {
 		}
 		pushFromCommit: docker.#Push & {
 			dest: "\(client.env.CI_REGISTRY_IMAGE):\(client.env.CI_COMMIT_REF_SLUG)"
+			auth: {
+				username: client.env.CI_REGISTRY_USER
+				secret:		client.env.CI_REGISTRY_PASSWORD
+			}
 			image: actions.build.image
 		}
 		release: #releaseJoyeuse & {
