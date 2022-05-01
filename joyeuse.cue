@@ -154,14 +154,14 @@ dagger.#Plan & {
 			}
 		}
 		env: {
-			CI_REGISTRY_USER: 		string
-			CI_REGISTRY_PASSWORD: dagger.#Secret
-			CI_REGISTRY: 					string
-			CI_REGISTRY_IMAGE: 		string
-			CI_DEFAULT_BRANCH: 		string
-			CI_COMMIT_BRANCH: 		string
-			CI_COMMIT_REF_SLUG: 	string
-			CI_COMMIT_TAG: 				string
+			CI_REGISTRY_USER: 		string | *""
+			CI_REGISTRY_PASSWORD: dagger.#Secret | *""
+			CI_REGISTRY: 					string | *""
+			CI_REGISTRY_IMAGE: 		string | *""
+			CI_DEFAULT_BRANCH: 		string | *""
+			CI_COMMIT_BRANCH: 		string | *""
+			CI_COMMIT_REF_SLUG: 	string | *""
+			CI_COMMIT_TAG: 				string | *""
 		}
 	}
 
