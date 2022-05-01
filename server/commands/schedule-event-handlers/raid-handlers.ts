@@ -90,7 +90,8 @@ export const handleRaidCreate = async (interaction: CommandInteraction) => {
     let raidName = interaction.options.getString(OPTION_RAID_NAME);
     const { name, shortName, description, color, vaulted, imageUrls } = getRaid(raidName);
 
-    const locale = getLocale(isValidLocale(interaction.options.getString(OPTION_LOCALE)) || interaction.locale as LocaleString);
+    const localeString = (isValidLocale(interaction.options.getString(OPTION_LOCALE)) || interaction.locale) as LocaleString
+    const locale = getLocale(localeString);
     const { responses, content, actions } = locale.commands.schedule.raid;
     const localizedName = locale.raids[shortName]?.name;
     const localizedDescription = locale.raids[shortName]?.description;
@@ -206,7 +207,7 @@ export const handleRaidCreate = async (interaction: CommandInteraction) => {
         canTeach,
         teachingRun,
         date,
-        locale: interaction.locale
+        locale: localeString
     }
     const store = await RaidStore.set(`${interaction.guild?.id}:${sentEmbed.id}`, details);
     if (!store) {
