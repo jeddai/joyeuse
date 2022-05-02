@@ -1,4 +1,4 @@
-FROM gitpod/workspace-base:latest
+FROM gitpod/workspace-full:latest
 
 ARG KUBECTL_VERSION=v1.22.2
 
