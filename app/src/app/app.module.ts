@@ -8,17 +8,24 @@ import { PrivacyPolicyComponent } from './pages/privacy-policy/privacy-policy.co
 import { CommandsComponent } from './pages/commands/commands.component';
 import { PageNotFoundComponent } from './pages/page-not-found/page-not-found.component';
 import { MarkdownModule } from 'ngx-markdown';
-import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { HttpClient, HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MaterialModule } from './material.module';
 import { MetadataService, DocsService } from './services/';
 import { StatisticsComponent } from './pages/statistics/statistics.component';
 import { MetricsService } from './services/metrics.service';
+import { ConfigService } from './services/config.service';
+import { AuthComponent } from './pages/auth/auth.component';
+import { AuthService } from './services/auth.service';
+import { AuthInterceptor } from './interceptors/auth-interceptor';
+import { DashboardComponent } from './pages/dashboard/dashboard.component';
 
 @NgModule({
   declarations: [
     AppComponent,
+    AuthComponent,
+    DashboardComponent,
     HomeComponent,
     PrivacyPolicyComponent,
     CommandsComponent,
@@ -38,9 +45,12 @@ import { MetricsService } from './services/metrics.service';
     MaterialModule
   ],
   providers: [
+    AuthService,
+    ConfigService,
     MetadataService,
     MetricsService,
-    DocsService
+    DocsService,
+    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
   ],
   bootstrap: [AppComponent]
 })

@@ -1,0 +1,11 @@
+.container {
+  padding: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+
+  > mat-card {
+    flex: 0 0 auto;
+    flex-basis: 30%;
+  }
+}

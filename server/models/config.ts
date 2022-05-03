@@ -2,6 +2,7 @@ import * as fs from 'fs';
 import { load } from 'js-yaml';
 
 export interface Config {
+    fqdn: string
     imageUrls: {
         iconUrl: string
         raids: {

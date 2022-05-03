@@ -5,12 +5,20 @@ import { PrivacyPolicyComponent } from './pages/privacy-policy/privacy-policy.co
 import { CommandsComponent } from './pages/commands/commands.component';
 import { PageNotFoundComponent } from './pages/page-not-found/page-not-found.component';
 import { StatisticsComponent } from './pages/statistics/statistics.component';
+import { AuthComponent } from './pages/auth/auth.component';
+import { DashboardComponent } from './pages/dashboard/dashboard.component';
 
 const routes: Routes = [
   {
     path: '',
     pathMatch: 'full',
     component: HomeComponent
+  }, {
+    path: 'auth',
+    component: AuthComponent
+  }, {
+    path: 'dashboard',
+    component: DashboardComponent
   }, {
     path: 'privacy',
     component: PrivacyPolicyComponent
@@ -27,7 +35,7 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes, { useHash: true })],
+  imports: [RouterModule.forRoot(routes, { useHash: false })],
   exports: [RouterModule]
 })
 export class AppRoutingModule { }

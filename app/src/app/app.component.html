@@ -5,9 +5,21 @@
   <span class="toolbar-small-spacer"></span>
   <button mat-button routerLink="/stats">Stats</button>
 
+  <ng-container *ngIf="!expired">
+    <span class="toolbar-small-spacer"></span>
+    <button mat-button routerLink="/dashboard">Dashboard</button>
+  </ng-container>
+
   <span class="toolbar-full-spacer"></span>
 
-  <a href="https://discord.com/oauth2/authorize?client_id=830982169891307520&permissions=10737536064&scope=bot%20applications.commands" target="_blank">
+  <a *ngIf="loginUrl && expired; else logout" [href]="loginUrl">
+    <button mat-raised-button color="primary">Login</button>
+  </a>
+  <ng-template #logout>
+    <button mat-raised-button color="warn" (click)="authService.logout()">Logout</button>
+  </ng-template>
+  <span class="toolbar-small-spacer"></span>
+  <a *ngIf="inviteUrl" [href]="inviteUrl" target="_blank">
     <button mat-raised-button color="primary">Invite <mat-icon [inline]="true">open_in_new</mat-icon></button>
   </a>
 </mat-toolbar>
