@@ -3,7 +3,7 @@ stages:
   - release
 
 .dagger:
-  image: grahamhub/joyeuse-dagger:latest
+  image: ${CI_DEPENDENCY_PROXY_GROUP_IMAGE_PREFIX}/grahamhub/joyeuse-dagger:latest
   variables:
     DAGGER_LOG_FORMAT: plain
     DAGGER_LOG_LEVEL: info
