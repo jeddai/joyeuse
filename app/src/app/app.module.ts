@@ -15,6 +15,7 @@ import { MaterialModule } from './material.module';
 import { MetadataService, DocsService } from './services/';
 import { StatisticsComponent } from './pages/statistics/statistics.component';
 import { MetricsService } from './services/metrics.service';
+import { TermsOfUseComponent } from './pages/terms-of-use/terms-of-use.component';
 
 @NgModule({
   declarations: [
@@ -23,7 +24,8 @@ import { MetricsService } from './services/metrics.service';
     PrivacyPolicyComponent,
     CommandsComponent,
     PageNotFoundComponent,
-    StatisticsComponent
+    StatisticsComponent,
+    TermsOfUseComponent
   ],
   imports: [
     BrowserModule,

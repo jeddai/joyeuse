@@ -5,6 +5,7 @@ import { PrivacyPolicyComponent } from './pages/privacy-policy/privacy-policy.co
 import { CommandsComponent } from './pages/commands/commands.component';
 import { PageNotFoundComponent } from './pages/page-not-found/page-not-found.component';
 import { StatisticsComponent } from './pages/statistics/statistics.component';
+import { TermsOfUseComponent } from './pages/terms-of-use/terms-of-use.component';
 
 const routes: Routes = [
   {
@@ -14,6 +15,9 @@ const routes: Routes = [
   }, {
     path: 'privacy',
     component: PrivacyPolicyComponent
+  }, {
+    path: 'terms-of-use',
+    component: TermsOfUseComponent
   }, {
     path: 'commands',
     component: CommandsComponent
