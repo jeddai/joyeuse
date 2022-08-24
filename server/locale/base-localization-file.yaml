@@ -7,7 +7,10 @@ raids:
   gardenOfSalvation:
     name: Garden of Salvation
     description: Track the source of the Unknown Artifact's signal into the Black Garden.
-  lastWish:
+  kingsFall:
+    name: King's Fall
+    description: Assassinate Oryx, the Taken King, and end the Taken War.
+lastWish:
     name: Last Wish
     description: Put an end to the Taken curse within the Dreaming City through killing Riven of a Thousand Voices, an Ahamkara taken by Oryx.
   vaultOfGlass:
@@ -29,6 +32,7 @@ commands:
             - name: Deep Stone Crypt
             - name: Eater of Worlds
             - name: Garden of Salvation
+            - name: King's Fall
             - name: Leviathan
             - name: Last Wish
             - name: Spire of Stars

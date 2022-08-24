@@ -5,6 +5,7 @@ export enum RaidName {
     DSC = 'Deep Stone Crypt',
     EOW = 'Eater of Worlds',
     GOS = 'Garden of Salvation',
+    KF = `King's Fall`,
     LEV = 'Leviathan',
     LW = 'Last Wish',
     SOS = 'Spire of Stars',
@@ -22,7 +23,8 @@ enum Color {
     BLACK = '#000000',
     PURPLE = '#8126e8',
     RED = '#da0a0a',
-    SILVER = '#b8b8b8'
+    SILVER = '#b8b8b8',
+    CRIMSON = '#990000'
 }
 
 export class Raid {
@@ -45,6 +47,7 @@ export class Raid {
             case RaidName.DSC: return 'deepStoneCrypt';
             case RaidName.EOW: return 'eaterOfWorlds';
             case RaidName.GOS: return 'gardenOfSalvation';
+            case RaidName.KF: return 'kingsFall';
             case RaidName.LEV: return 'leviathan';
             case RaidName.LW: return 'lastWish';
             case RaidName.SOS: return 'spireOfStars';
@@ -65,6 +68,7 @@ export const Raids: Raid[] = [
     new Raid(RaidName.DSC, false, Color.TEAL, `Purge the House of Salvation from the Deep Stone Crypt. Crash the Morning Star into Europa.`),
     new Raid(RaidName.EOW, true, Color.GRAY),
     new Raid(RaidName.GOS, false, Color.FOREST_GREEN, `Track the source of the Unknown Artifact's signal into the Black Garden.`),
+    new Raid(RaidName.KF, false, Color.CRIMSON, `Assassinate Oryx, the Taken King, and end the Taken War.`),
     new Raid(RaidName.LEV, true, Color.GOLD),
     new Raid(RaidName.LW, false, Color.BLACK, `Put an end to the Taken curse within the Dreaming City through killing Riven of a Thousand Voices, an Ahamkara taken by Oryx.`),
     new Raid(RaidName.SOS, true, Color.PURPLE),

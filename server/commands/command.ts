@@ -1,10 +1,13 @@
 import { SlashCommandBuilder, SlashCommandSubcommandsOnlyBuilder } from '@discordjs/builders';
-import { CommandInteraction, MessageComponentInteraction } from 'discord.js';
+import {
+    ChatInputCommandInteraction,
+    MessageComponentInteraction
+} from 'discord.js';
 
 export abstract class Command {
     abstract data: SlashCommandBuilder | SlashCommandSubcommandsOnlyBuilder;
 
-    abstract execute(interaction: CommandInteraction): Promise<void>;
+    abstract execute(interaction: ChatInputCommandInteraction): Promise<void>;
 }
 
 export abstract class InteractiveCommand extends Command {

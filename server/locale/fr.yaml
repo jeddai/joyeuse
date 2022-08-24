@@ -7,6 +7,9 @@ raids:
   gardenOfSalvation:
     name: Jardin du Salut
     description: Un signal émerge de l'obscurité et atteint des dimensions lointaines, vers les territoires sauvages et inexplorés du Jardin noir. L'endroit où il mène dans le Jardin est un mystère... Un mystère qui de ses murmures appelle à la tentation, et n'attend que d'être élucidé.
+  kingsFall:
+    name: King's Fall
+    description: Assassinate Oryx, the Taken King, and end the Taken War.
   lastWish:
     name: Dernier Voeux
     description: Riven, dernier des Ahamkara, a été corrompue. Votre mission est de la sauver de la corruption en purifiant son coeur. Entrez dans la cité des rêves et libérez-la! Nous ne pouvons pas laisser les corrompus gagner.
@@ -29,6 +32,7 @@ commands:
             - name: Crypte de la Pierre
             - name: Le Dévoreur de Monde
             - name: Jardin du Salut
+            - name: King's Fall
             - name: Leviathan
             - name: Dernier Voeux
             - name: La Flèche d'Étoiles

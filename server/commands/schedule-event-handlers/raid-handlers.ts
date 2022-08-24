@@ -1,17 +1,15 @@
 import {
-    CommandInteraction,
-    EmbedField,
+    ActionRowBuilder, APIEmbedField, ButtonBuilder,
+    ButtonStyle, ChatInputCommandInteraction,
+    EmbedBuilder,
+    EmbedField, HexColorString,
     Message,
-    MessageActionRow,
-    MessageButton,
-    MessageComponentInteraction,
-    MessageEmbed, Permissions
+    MessageComponentInteraction
 } from 'discord.js';
 import { MetricStore, RaidDetails, RaidStore } from '../../keyv';
 import { AppConfig, getRaid } from '../../models';
 import { randomInt } from 'crypto';
 import _ from 'lodash';
-import { MessageButtonStyles } from 'discord.js/typings/enums';
 import { client } from '../../discord/discord-client';
 import { SCHEDULE_EVENT_COMMAND_NAME } from '../schedule-event';
 import { SlashCommandStringOption, SlashCommandSubcommandBuilder } from '@discordjs/builders';
@@ -86,7 +84,7 @@ export const raidSubcommand = (subcommand: SlashCommandSubcommandBuilder) => {
     return subcommand;
 }
 
-export const handleRaidCreate = async (interaction: CommandInteraction) => {
+export const handleRaidCreate = async (interaction: ChatInputCommandInteraction) => {
     let raidName = interaction.options.getString(OPTION_RAID_NAME);
     const { name, shortName, description, color, vaulted, imageUrls } = getRaid(raidName);
 
@@ -103,7 +101,7 @@ export const handleRaidCreate = async (interaction: CommandInteraction) => {
     if (vaulted) {
         return await interaction.reply({
             content: interpolate(
-                [{ key: InterpolationKeys.RAID_NAME, value: name }],
+                [{ key: InterpolationKeys.RAID_NAME, value: name.toString() }],
                 responses.vaulted
             ),
             ephemeral: true
@@ -127,71 +125,70 @@ export const handleRaidCreate = async (interaction: CommandInteraction) => {
         .map((p, i) => `${i + 1}. ${!!p ? `<@${p}>` : ''}`).join('\n');
     const standbyText = '-';
 
-    const embed = new MessageEmbed({
-        color,
-        title: localizedName || name,
-        description: localizedDescription || description,
-        fields: [
-            !!date ? {
-                name: content.date,
-                value: date,
-                inline: false
-            } : null,
-            !!startTime ? {
-                name: content.startTime,
-                value: startTime,
-                inline: false
-            } : null,
-            canTeach !== undefined ? {
-                name: content.canTeach,
-                value: canTeach ? 'Yes' : 'No',
-                inline: false
-            } : null,
-            teachingRun !== undefined ? {
-                name: content.teachingRun,
-                value: teachingRun ? 'Yes' : 'No',
-                inline: false
-            } : null,
-            {
-                name: content.participants,
-                value: participantsText,
-                inline: true
-            },
-            {
-                name: content.standby,
-                value: standbyText,
-                inline: true
-            }
-        ].filter(f => !!f) as EmbedField[],
-        image: !!imageUrls ? {
-            url: imageUrls[randomInt(0, imageUrls.length - 1)]
-        } : undefined,
-        timestamp: Date.now(),
-        footer: {
+    const embed = new EmbedBuilder()
+        .setColor(color as HexColorString)
+        .setTitle(localizedName || name.toString())
+        .setDescription(localizedDescription || description)
+        .setImage(imageUrls ? imageUrls[imageUrls.length === 1 ? 0 : randomInt(0, imageUrls.length - 1)] : null)
+        .setTimestamp(Date.now())
+        .setFooter({
             text: `via joyeuse.app`,
             iconURL: AppConfig.imageUrls.iconUrl
-        }
-    });
+        })
+        .setFields(
+            [
+                !!date ? {
+                    name: content.date,
+                    value: date,
+                    inline: false
+                } : null,
+                !!startTime ? {
+                    name: content.startTime,
+                    value: startTime,
+                    inline: false
+                } : null,
+                canTeach !== undefined ? {
+                    name: content.canTeach,
+                    value: canTeach ? 'Yes' : 'No',
+                    inline: false
+                } : null,
+                teachingRun !== undefined ? {
+                    name: content.teachingRun,
+                    value: teachingRun ? 'Yes' : 'No',
+                    inline: false
+                } : null,
+                {
+                    name: content.participants,
+                    value: participantsText,
+                    inline: true
+                },
+                {
+                    name: content.standby,
+                    value: standbyText,
+                    inline: true,
+                }
+            ].filter(f => !!f) as EmbedField[]
+        )
+
+    const buttonRow = new ActionRowBuilder()
+        .addComponents(
+            new ButtonBuilder().setCustomId(`${SCHEDULE_EVENT_COMMAND_NAME}:raid:join`)
+                .setLabel(actions.join)
+                .setStyle(ButtonStyle.Success),
+            new ButtonBuilder().setCustomId(`${SCHEDULE_EVENT_COMMAND_NAME}:raid:standby`)
+                .setLabel(actions.standby)
+                .setStyle(ButtonStyle.Primary),
+            new ButtonBuilder().setCustomId(`${SCHEDULE_EVENT_COMMAND_NAME}:raid:notify`)
+                .setLabel(actions.notify)
+                .setStyle(ButtonStyle.Secondary),
+            new ButtonBuilder().setCustomId(`${SCHEDULE_EVENT_COMMAND_NAME}:raid:destroy`)
+                .setLabel(actions.destroy)
+                .setStyle(ButtonStyle.Danger)
+        )
 
     const sentEmbed = await interaction.reply({
         embeds: [ embed ],
-        components: [
-            new MessageActionRow()
-                .addComponents(
-                    new MessageButton().setCustomId(`${SCHEDULE_EVENT_COMMAND_NAME}:raid:join`)
-                        .setLabel(actions.join)
-                        .setStyle(MessageButtonStyles.SUCCESS),
-                    new MessageButton().setCustomId(`${SCHEDULE_EVENT_COMMAND_NAME}:raid:standby`)
-                        .setLabel(actions.standby)
-                        .setStyle(MessageButtonStyles.PRIMARY),
-                    new MessageButton().setCustomId(`${SCHEDULE_EVENT_COMMAND_NAME}:raid:notify`)
-                        .setLabel(actions.notify)
-                        .setStyle(MessageButtonStyles.SECONDARY),
-                    new MessageButton().setCustomId(`${SCHEDULE_EVENT_COMMAND_NAME}:raid:destroy`)
-                        .setLabel(actions.destroy)
-                        .setStyle(MessageButtonStyles.DANGER)
-                )
-        ],
+        components: [ buttonRow ] as any[],
         fetchReply: true
     });
 
@@ -224,23 +221,31 @@ export const handleRaidInteraction = async (interaction: MessageComponentInterac
 
     let raid = await RaidStore.get(`${interaction.guild?.id}:${interaction.message.id}`);
 
-    const raidLocale = getLocale(raid?.locale as LocaleString).commands.schedule.raid;
+    let raidLocale = getLocale(raid?.locale as LocaleString).commands.schedule.raid;
     const { content, responses, actions } = getLocale(interaction.locale as LocaleString).commands.schedule.raid;
 
     const isFireteamLeader = (raid?.participants?.length ?? 0) > 0 && raid?.participants[0] === interaction.user.id;
-    const canManageMessages = interaction.memberPermissions?.has(Permissions.FLAGS.MANAGE_MESSAGES);
+    const canManageMessages = interaction.memberPermissions?.has('ManageMessages');
 
     const update = async (message?: Message) => {
         if (!raid) return;
+        raidLocale = getLocale(raid.locale as LocaleString).commands.schedule.raid;
 
-        let embed = (message || interaction.message).embeds[0];
+        let embed: any = (message || interaction.message).embeds[0];
         if (!embed) {
             const { name, description, color, imageUrls } = getRaid(raid.raid);
-            embed = new MessageEmbed({
-                color,
-                title: name,
-                description: description,
-                fields: [{
+            embed = new EmbedBuilder()
+                .setColor(color as HexColorString)
+                .setTitle(name)
+                .setDescription(description)
+                .setImage(!!imageUrls ? imageUrls[randomInt(0, imageUrls.length - 1)] : null)
+                .setTimestamp(Date.now())
+                .setFooter({
+                    text: `via joyeuse.app`,
+                    iconURL: AppConfig.imageUrls.iconUrl
+                })
+                .setFields(
+                    [{
                         name: raidLocale.content.participants,
                         value: '-',
                         inline: true
@@ -248,26 +253,18 @@ export const handleRaidInteraction = async (interaction: MessageComponentInterac
                         name: raidLocale.content.standby,
                         value: '-',
                         inline: true
-                    }].filter(f => !!f) as EmbedField[],
-                image: !!imageUrls ? {
-                    url: imageUrls[randomInt(0, imageUrls.length - 1)]
-                } : undefined,
-                timestamp: Date.now(),
-                footer: {
-                    text: `via joyeuse.app`,
-                    iconURL: AppConfig.imageUrls.iconUrl
-                }
-            })
+                    }].filter(f => !!f) as APIEmbedField[]
+                )
+                .data
         }
 
-        const participants = (embed.fields || []).find(f => f.name === raidLocale.content.participants);
-        const standby = (embed.fields || []).find(f => f.name === raidLocale.content.standby);
+        const participants = (embed.fields || []).find((f: APIEmbedField) => f.name === raidLocale.content.participants);
+        const standby = (embed.fields || []).find((f: APIEmbedField) => f.name === raidLocale.content.standby);
         if (participants)
             participants.value = [ ...raid.participants, ...(_.range(6 - raid.participants.length).map(_ => '')) ]
                 .map((p, i) => `${i + 1}. ${!!p ? `<@${p}>` : ''}`).join('\n');
         if (standby)
             standby.value = raid.standby.map((s, i) => `${i + 1}. <@${s}>`).join('\n') || '-';
-        embed.timestamp = Date.now();
 
         if (message) {
             await message.edit({ embeds: [embed] });
@@ -281,7 +278,8 @@ export const handleRaidInteraction = async (interaction: MessageComponentInterac
         case 'join':
         case 'standby': {
             if (!raid) {
-                return await interaction.reply({ content: responses.expired, ephemeral: true });
+                await interaction.reply({ content: responses.expired, ephemeral: true });
+                return;
             }
 
             const participating = raid.participants.find(p => p === interaction.user.id);
@@ -303,13 +301,13 @@ export const handleRaidInteraction = async (interaction: MessageComponentInterac
                     content: content.joinConfirmation,
                     ephemeral: true,
                     components: [
-                        new MessageActionRow()
+                        new ActionRowBuilder()
                             .addComponents(
-                                new MessageButton().setCustomId(`${SCHEDULE_EVENT_COMMAND_NAME}:raid:response:${primary}:${interaction.message.id}`)
+                                new ButtonBuilder().setCustomId(`${SCHEDULE_EVENT_COMMAND_NAME}:raid:response:${primary}:${interaction.message.id}`)
                                     .setLabel(actions.agree)
-                                    .setStyle(MessageButtonStyles.SUCCESS)
+                                    .setStyle(ButtonStyle.Success)
                             )
-                    ]
+                    ] as any[]
                 });
 
                 return;
@@ -321,58 +319,65 @@ export const handleRaidInteraction = async (interaction: MessageComponentInterac
         }
         case 'notify': {
             if (!raid) {
-                return await interaction.reply({ content: responses.expired, ephemeral: true });
+                await interaction.reply({ content: responses.expired, ephemeral: true });
+                return
             }
 
             if (raid.participants.length > 0 && raid.participants[0] === interaction.user.id) {
                 if (raid.notified) {
-                    return await interaction.reply({ content: responses.notifyAttemptFailed, ephemeral: true });
+                    await interaction.reply({ content: responses.notifyAttemptFailed, ephemeral: true });
+                    return;
                 } else {
-                    return await interaction.reply({
+                    await interaction.reply({
                         content: content.notifyConfirmation,
                         ephemeral: true,
                         components: [
-                            new MessageActionRow()
+                            new ActionRowBuilder()
                                 .addComponents(
-                                    new MessageButton().setCustomId(`${SCHEDULE_EVENT_COMMAND_NAME}:raid:response:${primary}:${interaction.message.id}`)
+                                    new ButtonBuilder().setCustomId(`${SCHEDULE_EVENT_COMMAND_NAME}:raid:response:${primary}:${interaction.message.id}`)
                                         .setLabel('Yes')
-                                        .setStyle(MessageButtonStyles.PRIMARY)
+                                        .setStyle(ButtonStyle.Primary)
                                 )
-                        ]
+                        ] as any[]
                     });
+                    return;
                 }
             } else {
-                return await interaction.reply({ content: responses.notifyUnauthorized, ephemeral: true });
+                await interaction.reply({ content: responses.notifyUnauthorized, ephemeral: true });
+                return;
             }
         }
         case 'destroy': {
             if (!raid) {
                 await interaction.channel?.messages.delete(interaction.message.id);
-                return await interaction.reply({content: responses.destroyComplete, ephemeral: true});
+                await interaction.reply({content: responses.destroyComplete, ephemeral: true});
+                return;
             }
 
             if (isFireteamLeader || canManageMessages) {
-                return await interaction.reply({
+                await interaction.reply({
                     content: content.destroyConfirmation,
                     ephemeral: true,
                     components: [
-                        new MessageActionRow()
+                        new ActionRowBuilder()
                             .addComponents(
-                                new MessageButton().setCustomId(`${SCHEDULE_EVENT_COMMAND_NAME}:raid:response:${primary}:${interaction.message.id}`)
+                                new ButtonBuilder().setCustomId(`${SCHEDULE_EVENT_COMMAND_NAME}:raid:response:${primary}:${interaction.message.id}`)
                                     .setLabel('Yes')
-                                    .setStyle(MessageButtonStyles.DANGER)
+                                    .setStyle(ButtonStyle.Danger)
                             )
-                    ]
+                    ] as any[]
                 });
             } else {
-                return await interaction.reply({ content: responses.destroyUnauthorized, ephemeral: true });
+                await interaction.reply({ content: responses.destroyUnauthorized, ephemeral: true });
             }
+            return;
         }
         case 'response': {
             if (!raid) {
                 raid = await RaidStore.get(`${interaction.guild?.id}:${tertiary}`);
                 if (!raid) {
-                    return await interaction.reply({ content: responses.expired, ephemeral: true });
+                    await interaction.reply({ content: responses.expired, ephemeral: true });
+                    return;
                 }
             }
 
@@ -406,17 +411,18 @@ export const handleRaidInteraction = async (interaction: MessageComponentInterac
                         await RaidStore.set(`${interaction.guild?.id}:${raid.messageId}`, raid);
                     }
                 } else {
-                    return await interaction.reply({ content: responses.notifyUnauthorized, ephemeral: true });
+                    await interaction.reply({ content: responses.notifyUnauthorized, ephemeral: true });
                 }
                 return;
             } else if (secondary === 'destroy') {
                 if (isFireteamLeader || canManageMessages) {
                     await interaction.channel?.messages.delete(raid.messageId);
                     await RaidStore.delete(raid.messageId);
-                    return await interaction.reply({ content: responses.destroyComplete, ephemeral: true });
+                    await interaction.reply({ content: responses.destroyComplete, ephemeral: true });
                 } else {
-                    return await interaction.reply({ content: responses.destroyUnauthorized, ephemeral: true });
+                    await interaction.reply({ content: responses.destroyUnauthorized, ephemeral: true });
                 }
+                return;
             }
 
             await update(message);

@@ -1,7 +1,7 @@
 import { client } from './discord/discord-client';
 import { AppConfig } from './models';
 import express, { json, static as staticFolder, urlencoded } from 'express';
-import { Collection } from 'discord.js';
+import { ChatInputCommandInteraction, Collection, InteractionType } from 'discord.js';
 import { Command, CommandsList, InteractiveCommand } from './commands';
 import { routes } from './routes';
 import { redis } from './keyv';
@@ -58,13 +58,13 @@ if (process.env.DISCORD_ENABLED === 'true') {
     });
 
     client.on('interactionCreate', async interaction => {
-        if (interaction.isCommand()) {
+        if (interaction.type === InteractionType.ApplicationCommand) {
             const command = commands.get(interaction.commandName) as Command;
 
             if (!command) return;
 
             try {
-                await command.execute(interaction);
+                await command.execute(interaction as ChatInputCommandInteraction);
             } catch (err) {
                 console.error(err);
                 try {
@@ -73,7 +73,7 @@ if (process.env.DISCORD_ENABLED === 'true') {
                     console.error(err);
                 }
             }
-        } else if (interaction.isMessageComponent()) {
+        } else if (interaction.type === InteractionType.MessageComponent) {
             const [ commandName ] = interaction.customId.split(':');
             const command = commands.get(commandName) as InteractiveCommand;
             if (command.hasOwnProperty('handleMessageComponentInteraction')) {
