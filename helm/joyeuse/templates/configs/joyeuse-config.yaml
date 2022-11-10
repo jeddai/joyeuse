@@ -26,6 +26,8 @@ data:
           - 'https://jeddai.nyc3.digitaloceanspaces.com/the-speaker/raids/garden-of-salvation/D2_Shadowkeep_GardenOfSalvation_07.png'
           - 'https://jeddai.nyc3.digitaloceanspaces.com/the-speaker/raids/garden-of-salvation/D2_Shadowkeep_GardenOfSalvation_08.png'
           - 'https://jeddai.nyc3.digitaloceanspaces.com/the-speaker/raids/garden-of-salvation/D2_Shadowkeep_GardenOfSalvation_09.png'
+        kingsFall:
+          - 'https://jeddai.nyc3.digitaloceanspaces.com/the-speaker/raids/kings-fall/kings-fall-center.jpg'
         lastWish:
           - 'https://jeddai.nyc3.digitaloceanspaces.com/the-speaker/raids/last-wish/D2_Forsaken_LastWish_01.png'
           - 'https://jeddai.nyc3.digitaloceanspaces.com/the-speaker/raids/last-wish/D2_Forsaken_LastWish_02.png'
