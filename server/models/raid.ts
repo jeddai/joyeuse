@@ -8,6 +8,7 @@ export enum RaidName {
     KF = `King's Fall`,
     LEV = 'Leviathan',
     LW = 'Last Wish',
+    RON = 'Root of Nightmares',
     SOS = 'Spire of Stars',
     SOTP = 'Scourge of the Past',
     VOG = 'Vault of Glass',
@@ -24,7 +25,8 @@ enum Color {
     PURPLE = '#8126e8',
     RED = '#da0a0a',
     SILVER = '#b8b8b8',
-    CRIMSON = '#990000'
+    CRIMSON = '#990000',
+    WHITE = '#ffffff'
 }
 
 export class Raid {
@@ -50,6 +52,7 @@ export class Raid {
             case RaidName.KF: return 'kingsFall';
             case RaidName.LEV: return 'leviathan';
             case RaidName.LW: return 'lastWish';
+            case RaidName.RON: return 'rootOfNightmares';
             case RaidName.SOS: return 'spireOfStars';
             case RaidName.SOTP: return 'scourgeOfThePast';
             case RaidName.VOG: return 'vaultOfGlass';
@@ -71,6 +74,7 @@ export const Raids: Raid[] = [
     new Raid(RaidName.KF, false, Color.CRIMSON, `Assassinate Oryx, the Taken King, and end the Taken War.`),
     new Raid(RaidName.LEV, true, Color.GOLD),
     new Raid(RaidName.LW, false, Color.BLACK, `Put an end to the Taken curse within the Dreaming City through killing Riven of a Thousand Voices, an Ahamkara taken by Oryx.`),
+    new Raid(RaidName.RON, false, Color.WHITE, `Confront the ancient threat growing at our doorstep, ferried from an unknown time and place.`),
     new Raid(RaidName.SOS, true, Color.PURPLE),
     new Raid(RaidName.SOTP, true, Color.RED),
     new Raid(RaidName.VOG, false, Color.SILVER, `The time lost Raid returns. Stored away, deep in the Vault of Glass on Venus is Atheon, Time's Conflux. No one knows what this Vex is. Guardians must access the Vault, navigate the fractures in space and time, and terminate Atheon before it can become an unstoppable threat.`),

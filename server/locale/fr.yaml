@@ -13,6 +13,9 @@ raids:
   lastWish:
     name: Dernier Voeux
     description: Riven, dernier des Ahamkara, a été corrompue. Votre mission est de la sauver de la corruption en purifiant son coeur. Entrez dans la cité des rêves et libérez-la! Nous ne pouvons pas laisser les corrompus gagner.
+  rootOfNightmares:
+    name: Root of Nightmares
+    description: Confront the ancient threat growing at our doorstep, ferried from an unknown time and place.
   vaultOfGlass:
     name: Caveau de Verre
     description: Dissimulé au fin fond du Caveau de verre, sur Vénus, se trouve Athéon, Déchirure temporelle. Personne ne connaît la nature de ce Vex. Les Gardiens doivent accéder au Caveau, se frayer un chemin à travers l'espace et le temps, et éliminer Athéon avant qu'il ne devienne une trop grande menace.
@@ -35,6 +38,7 @@ commands:
             - name: La Chute du Roi
             - name: Leviathan
             - name: Dernier Voeux
+            - name: Root of Nightmares
             - name: La Flèche d'Étoiles
             - name: Fléau du Passé
             - name: Caveau de Verre
