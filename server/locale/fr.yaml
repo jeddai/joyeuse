@@ -1,6 +1,9 @@
 genericError: Une erreur s'est produite en exécutant cette commande!
 nonInteractiveError: Cette commande n'est pas interactive. Cette erreur n'aurait pas du se produire.
 raids:
+  crotasEnd:
+    name: Crota's End
+    description: Assassinate Crota, Son of Oryx in his throne world.
   deepStoneCrypt:
     name: Crypte de la Pierre
     description: Sous la toundra gelée d'Europe se trouve la Crypte de la Pierre. Elle est restée endormie pendant plusieurs décennies... jusqu'à maintenant.
@@ -31,6 +34,7 @@ commands:
         - name: raid-name
           description: Le nom du raid.
           choices:
+            - name: Crota's End
             - name: Couronne du Malheur
             - name: Crypte de la Pierre
             - name: Le Dévoreur de Monde

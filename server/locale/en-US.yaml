@@ -1,6 +1,9 @@
 genericError: There was an error while executing this command!
 nonInteractiveError: Command <command_name> is not interactive. Not quite sure how this happened.
 raids:
+  crotasEnd:
+    name: Crota's End
+    description: Assassinate Crota, Son of Oryx in his throne world.
   deepStoneCrypt:
     name: Deep Stone Crypt
     description: Purge the House of Salvation from the Deep Stone Crypt. Crash the Morning Star into Europa.
@@ -33,6 +36,8 @@ commands:
           type: string
           required: true
           choices:
+            - name: Crota's End
+              value: crotasEnd
             - name: Crown of Sorrow
               value: crownOfSorrow
             - name: Deep Stone Crypt

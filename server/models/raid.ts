@@ -1,6 +1,7 @@
 import { AppConfig } from './config';
 
 export enum RaidName {
+    CE = `Crota's End`,
     COS = 'Crown of Sorrow',
     DSC = 'Deep Stone Crypt',
     EOW = 'Eater of Worlds',
@@ -45,6 +46,7 @@ export class Raid {
 
     get shortName(): string {
         switch (this.name) {
+            case RaidName.CE: return 'crotasEnd';
             case RaidName.COS: return 'crownOfSorrow';
             case RaidName.DSC: return 'deepStoneCrypt';
             case RaidName.EOW: return 'eaterOfWorlds';
@@ -67,6 +69,7 @@ export class Raid {
 }
 
 export const Raids: Raid[] = [
+    new Raid(RaidName.CE, false, Color.FOREST_GREEN, `Assassinate Crota, Son of Oryx in his throne world.`),
     new Raid(RaidName.COS, true, Color.SICKLY_GREEN),
     new Raid(RaidName.DSC, false, Color.TEAL, `Purge the House of Salvation from the Deep Stone Crypt. Crash the Morning Star into Europa.`),
     new Raid(RaidName.EOW, true, Color.GRAY),
@@ -86,6 +89,8 @@ export const getRaid = (raidName: string | null | undefined): Raid => {
 }
 
 export const raidKeys: { [key: string]: RaidName } = {
+    'ce': RaidName.CE,
+    'crota': RaidName.CE,
     'cos': RaidName.COS,
     'crown': RaidName.COS,
     'crown sorrow': RaidName.COS,
